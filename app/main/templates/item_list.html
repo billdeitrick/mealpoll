@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<div class="col-md-6">
+    {{ wtf.quick_form(form, action=url_for('main.item_delete'), id="item-delete-form") }}
+    <h1>{{ item_type }}s</h1>
+    <ul class="list-group item-list">
+        {% if data|count > 0 %}
+            {% for datum in data %}
+                <li class="list-group-item">
+                    <div class="pull-right">
+                        <a href="{{ url_for('main.item_edit', item_type=type_lower, item_id=datum.id) }}"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></button></a>
+                        <button class="btn btn-danger" data-delete="item" data-deletetype="{{ type_lower }}" data-id="{{ datum.id }}"><span class="glyphicon glyphicon-trash" data-delete="item"></span></button>
+                    </div>
+                    <div>
+                        {% if item_type == "MealType" %}
+                            <h4>{{ datum.name }}</h4>
+                        {% else %}
+                            <h4>{{ datum.label }}</h4>
+                            <p>{{ datum.description }}</p>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>No {{ type_lower }}s to show...create one!</p>
+        {% endif %}
+        </ul>
+    <a href="{{ url_for('main.item_edit', item_type=type_lower) }}">
+        <button class="btn btn-primary">New {{ item_type }} <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+    </a>
+</div>
+{% endblock %}
